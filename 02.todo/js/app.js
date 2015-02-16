@@ -1,61 +1,56 @@
 (function(){
 /*
  モデルの設計
- Food: {
-  name: "名前",
-  calory: "カロリー"
+Todo: {
+  category: "カテゴリー",
+  detail  : "詳細"
  }
 */
 
   // Model
-  var Food = Backbone.Model.extend({
-    default: {
-      name: '',
-      calory: 0
+  var Todo = Backbone.Model.extend({
+    url: "users",
+    defaults: {
+      category: '',
+      detail: ''
     },
 
     initialize: function() {
-      if ( !this.get('name') ) {
-        this.set('name', this.defaults.name);
+      if ( !this.get('category') ) {
+        this.set('category', this.defaults.category);
       }
-      if ( !this.get('calory') ) {
-        this.set('calory',  this.defaults.calory);
+      if ( !this.get('detail') ) {
+        this.set('detail',  this.defaults.detail);
       }
     }
   });
 
   // Collection
-  var FoodCollection = Backbone.Collection.extend({
-    model: Food
+  var TodoCollection = Backbone.Collection.extend({
+    model: Todo
   });
 
   // インスタンス化
-  var fc = new FoodCollection({name:'steaks', calory:400});
-
-  // fc.each(function(e, i) {
-  //   console.log(e.get('name'));
-  // });
-  // console.log(fc.models[0].get('name'));
+  var TD = new TodoCollection({category:'勉強', detail:'javascript'});
 
   // View
-  var FoodView = Backbone.View.extend({
+  var TodoView = Backbone.View.extend({
     tagName: 'li',
-    className: 'food',
+    className: 'todo',
     initialize: function() {
       this.render();
     },
     render: function() {
-      // console.log(this.model.get('name'));
 
-      var tmpName = $('<span class="name">').text(this.model.get('name'));
-      var tmpCalory = $('<span class="calory">').text(this.model.get('calory'));
+      var tmpCategory = $('<span class="category">').text(this.model.get('category'));
+      var tmpDetail = $('<span class="detail">').text(this.model.get('detail'));
 
-      $(this.el).html(tmpName).append(tmpCalory);
+      $(this.el).html(tmpCategory).append(tmpDetail);
       return this;
     }
   });
 
-  var FoodListView = Backbone.View.extend({
+  var TodoListView = Backbone.View.extend({
     el: $('#list'),
     initialize: function() {
       this.render();
@@ -64,11 +59,32 @@
       $(this.el).append($('<ul>'));
     },
     add: function(food) {
-      var viewIns = new FoodView({model: food});
+      var viewIns = new TodoView({model: food});
       $(this.el).find('ul').append(viewIns.el);
     },
     addAll: function() {
-      fc.each(this.add, this);
+      TD.each(this.add, this);
+    }
+  });
+
+ // View to add new food interface 追加
+  var NewView = Backbone.View.extend({
+    el: $('#newTodo'),
+    initialize: function() {
+      this.render();
+    },
+    events:{
+      'click button#newTodo-button': 'addTodo'
+    },
+    render: function() {
+      var tmp = $('<input id="newTodo-category" placeholder="Input category."><input id="newTodo-detail" placeholder="Input Detail."><button id="newTodo-button">create</button>');
+      $(this.el).html(tmp);
+    },
+    addTodo: function() {
+      TD.create({
+        category:$(this.el).find('input#newTodo-category').val(),
+        detail:$(this.el).find('input#newTodo-detail').val()});
+      this.render();
     }
   });
 
@@ -76,13 +92,15 @@
     el: $('#app'),
     views: {},
     initialize: function() {
-      this.views.foodlist = new FoodListView();
-      this.views.foodlist.addAll();
-      // fc.on('add', this.views.foodlist.add, this.views.foodlist);
-      // fc.on('reset', this.views.foodlist.addAll, this.views.foodlist);
-      // fc.fetch({reset:true});
+      this.views.todolist = new TodoListView();
+      this.views.new = new NewView();
+
+      TD.on('add', this.views.todolist.add, this.views.todolist);
+      TD.on('reset', this.views.todolist.addAll, this.views.todolist);
+      TD.fetch({reset:true});
     }
   });
+
 
   var App = new AppView();
 
