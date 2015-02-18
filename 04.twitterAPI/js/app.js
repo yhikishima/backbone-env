@@ -69,7 +69,6 @@
     }
   });
 
-
   // 検索ボタンを押すとTwitterから検索
   $("#searchBtn").click(function(e){
       var jqxhr = $.ajax({
@@ -85,14 +84,7 @@
       });
   });
 
-
   var appModel = new ApplicationModel({});
   var appView =  new ApplicationView({model: appModel});
-
-
-
-
-
-
 
 })();
