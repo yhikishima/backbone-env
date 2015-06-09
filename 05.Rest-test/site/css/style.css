@@ -1,0 +1,63 @@
+/* style.css */
+
+.ly-books {
+  padding: 10px;
+}
+
+.ly-books h1 {
+  margin-bottom: 0;
+}
+
+.ly-booksForm {
+  padding: 25px 0;
+}
+
+.ly-booksForm input,
+.ly-booksForm label {
+  float: left;
+  clear: both;
+}
+
+.ly-booksForm input {
+  margin-bottom: 10px;
+}
+
+.ly-booksForm button {
+  clear: both;
+  display: block;
+}
+
+.bookContainer {
+  clear: both;
+  padding: 20px;
+  width: 500px;
+  border: 3px solid #c7c7c7;
+}
+
+.bookContainer:after {
+  content: '';
+  clear: both;
+  display: block;
+  overflow: hidden;
+}
+
+.bookContainer img {
+  width: 150px;
+  float: left;
+  margin-bottom: 20px;
+}
+
+.bookContainer ul {
+  float: left;
+  width: 300px;
+}
+
+.bookContainer li {
+  list-style: none;
+}
+
+.bookContainer .delete {
+  display: block;
+  clear: both;
+  margin-top: 20px;
+}
